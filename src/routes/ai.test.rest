@@ -1,0 +1,57 @@
+@hostname = http://localhost:3000
+@api = {{hostname}}/api/v1
+
+###
+# Create an event to be used in AI tests
+# @name createAiTestEvent
+POST {{api}}/events
+Content-Type: application/json
+
+{
+  "title": "AI Test Event",
+  "description": "An event to test AI features.",
+  "mode": "online",
+  "venue": "Google Meet",
+  "startTime": "2025-11-16T14:00:00",
+  "endTime": "2025-11-16T15:00:00",
+  "tags": ["ai", "test"]
+}
+
+###
+# @name aiTestEventId
+@aiTestEventId = {{createAiTestEvent.response.body.data}}
+
+###
+# Auto Reschedule
+# This should suggest a new time for the event.
+POST {{api}}/ai/auto-reschedule/d2c51e30-e01f-4246-a44b-d051f1402abe
+
+###
+# Improve Description
+# This should return an improved description for the event.
+GET {{api}}/ai/improve-description/d2c51e30-e01f-4246-a44b-d051f1402abe
+
+###
+# Generate Summary
+# This should return a summary of all events.
+GET {{api}}/ai/generate-summary
+
+###
+# Natural Language Query
+# This should answer a question about the schedule.
+POST {{api}}/ai/natural-language-query
+Content-Type: application/json
+
+{
+  "query": "What is scheduled for today?"
+}
+
+###
+# Natural Language Query - Free time
+# This should answer a question about free time.
+POST {{api}}/ai/natural-language-query
+Content-Type: application/json
+
+{
+  "query": "When am I free tomorrow?"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "start:dev": "tsx --watch src/index.ts",
+    "start:prod": "node dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "format": "npx prettier --write src/**/*.ts"
+  },
+  "keywords": [],
+  "author": "Kevin Rozario",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "zod": "^4.1.12"
+  }
+}

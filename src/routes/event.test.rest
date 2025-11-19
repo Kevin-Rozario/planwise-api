@@ -1,0 +1,118 @@
+@hostname = http://localhost:3000
+@api = {{hostname}}/api/v1
+
+###
+# @name createEvent1
+# Create Event 1 (Successful)
+# This should create a new event and return a 201 status code.
+POST {{api}}/events
+Content-Type: application/json
+
+{
+  "title": "Team Meeting",
+  "description": "Weekly sync-up with project team to discuss progress and blockers.",
+  "mode": "offline",
+  "venue": "Conference Room A",
+  "startTime": "2025-11-16T09:00:00",
+  "endTime": "2025-11-16T10:00:00",
+  "priority": "high",
+  "tags": ["meeting", "project"]
+}
+
+###
+# @name createEvent2
+# Create Event 2 (Successful)
+# This should create another event.
+POST {{api}}/events
+Content-Type: application/json
+
+{
+  "title": "Client Presentation",
+  "description": "Presentation for new product feature rollout to the client.",
+  "mode": "online",
+  "venue": "Zoom",
+  "startTime": "2025-11-16T11:00:00",
+  "endTime": "2025-11-16T12:30:00",
+  "priority": "high",
+  "tags": ["client", "presentation"]
+}
+
+###
+# @name createEventConflict
+# Create Event (Conflict)
+# This should return a 409 Conflict status code as it overlaps with Event 1.
+POST {{api}}/events
+Content-Type: application/json
+
+{
+  "title": "Workshop",
+  "description": "A workshop on new technologies.",
+  "mode": "offline",
+  "venue": "Conference Room B",
+  "startTime": "2025-11-16T09:30:00",
+  "endTime": "2025-11-16T11:00:00",
+  "tags": ["workshop"]
+}
+
+###
+# Fetch All Events
+# This should return a list of all events.
+GET {{api}}/events
+
+###
+# @name getEvent1Id
+@event1Id = {{createEvent1.response.body.data}}
+
+# Fetch Event by ID
+# This should return the details of Event 1.
+GET {{api}}/events/{{event1Id}}
+
+###
+# Update Event (Success)
+# This should update Event 2 successfully.
+@event2Id = {{createEvent2.response.body.data}}
+PUT {{api}}/events/{{event2Id}}
+Content-Type: application/json
+
+{
+  "title": "Client Presentation (Updated)",
+  "description": "Updated presentation for new product feature rollout to the client.",
+  "mode": "online",
+  "venue": "Zoom",
+  "startTime": "2025-11-16T11:00:00",
+  "endTime": "2025-11-16T12:30:00",
+  "priority": "high",
+  "tags": ["client", "presentation", "updated"]
+}
+
+###
+# Update Event (Conflict)
+# This should return a 409 Conflict as it now overlaps with Event 1.
+PUT {{api}}/events/{{event2Id}}
+Content-Type: application/json
+
+{
+  "title": "Client Presentation (Conflict)",
+  "description": "This will cause a conflict.",
+  "mode": "online",
+  "venue": "Zoom",
+  "startTime": "2025-11-16T09:45:00",
+  "endTime": "2025-11-16T11:15:00",
+  "priority": "high",
+  "tags": ["client", "presentation", "conflict"]
+}
+
+###
+# Filter Events by Tag
+# This should return events with the 'project' tag.
+GET {{api}}/events/filtered?tag=project
+
+###
+# Delete Event
+# This should delete Event 1.
+DELETE {{api}}/events/{{event1Id}}
+
+###
+# Fetch All Events (After Deletion)
+# This should return the list of events without Event 1.
+GET {{api}}/events
