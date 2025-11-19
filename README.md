@@ -64,7 +64,7 @@ To start the development server with live reloading, run:
 ```bash
 npm run start:dev
 ```
-The server will start on `http://localhost:4000`.
+The server will attempt to start on port `3000` (as defined in `.env`) and fall back to `4000` if `3000` is unavailable.
 
 ## 📖 API Documentation
 
